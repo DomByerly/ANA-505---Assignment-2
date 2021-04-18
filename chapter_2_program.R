@@ -62,58 +62,58 @@ xyplot(attend/1000 ~ temp | skies + day_night, ## Lines 60-61 is establishing th
     key = list(space = "top", 
         text = list(rev(group.labels),col = rev(group.colors)), ##The text function establishes the the group labels
         points = list(pch = rev(group.symbols), col = rev(group.colors),  ## the points fucntion is used to draw a sequence of points at the specific coordinates.
-        fill = rev(group.fill))))  
+        fill = rev(group.fill))))  ##The fill function is used to fill in missing values in the columns.
                 
-# attendance by opponent and day/night game
-group.labels <- c("Day","Night")
+# attendance by opponent and day/night game ##The next group of lines 67-81 are used to prepare a graphical summary of the dodgers data to create a graph that compares the relationship between attendence and whether or not the game is at day or night.
+group.labels <- c("Day","Night") ##Lines 68-70 are establishing the labels, symbols and size of the variable day_night. 
 group.symbols <- c(1,20)
 group.symbols.size <- c(2,2.75)
-bwplot(opponent ~ attend/1000, data = dodgers, groups = day_night, 
+bwplot(opponent ~ attend/1000, data = dodgers, groups = day_night, ##Line 71 establishes a box and whisker plot that includes opponent, attendence and day_night
     xlab = "Attendance (thousands)",
-    panel = function(x, y, groups, subscripts, ...) 
+    panel = function(x, y, groups, subscripts, ...) ##The panel command is establishing the data as observed across time, or cross-sectional time series data.
        {panel.grid(h = (length(levels(dodgers$opponent)) - 1), v = -1)
-        panel.stripplot(x, y, groups = groups, subscripts = subscripts, 
-        cex = group.symbols.size, pch = group.symbols, col = "darkblue")
+        panel.stripplot(x, y, groups = groups, subscripts = subscripts, ##The stripplot command marks data as a series of marks against a single magnitude axis.
+        cex = group.symbols.size, pch = group.symbols, col = "darkblue") ##The cex command establishes the amount by which text and symbols should be scaled to the default.
        },
     key = list(space = "top", 
-    text = list(group.labels,col = "black"),
-    points = list(pch = group.symbols, cex = group.symbols.size, 
-    col = "darkblue")))
+    text = list(group.labels,col = "black"), ##The text function establishes the group label names
+    points = list(pch = group.symbols, cex = group.symbols.size, ##This establishes a sequence of points at specific coordinates.
+    col = "darkblue"))) ##This establishes the column indexes as dark blue
      
 # employ training-and-test regimen for model validation
 set.seed(1234) # set seed for repeatability of training-and-test split
 training_test <- c(rep(1,length=trunc((2/3)*nrow(dodgers))),
 rep(2,length=(nrow(dodgers) - trunc((2/3)*nrow(dodgers)))))
 dodgers$training_test <- sample(training_test) # random permutation 
-dodgers$training_test <- factor(dodgers$training_test, 
-  levels=c(1,2), labels=c("TRAIN","TEST"))
-dodgers.train <- subset(dodgers, training_test == "TRAIN")
+dodgers$training_test <- factor(dodgers$training_test, ##This is creating multiple permutations of the training-and test regiment model
+  levels=c(1,2), labels=c("TRAIN","TEST")) ##Establishes two levels and the training and test regiment
+dodgers.train <- subset(dodgers, training_test == "TRAIN") ##Lines 90-91 and 92-93 are establishing the subest for the training regiment and then the test regiment. The print commands are printing the argument and retuning them invisibly.
 print(str(dodgers.train)) # check training data frame
 dodgers.test <- subset(dodgers, training_test == "TEST")
 print(str(dodgers.test)) # check test data frame
-
+##Line 96 specifies a model that includes attendence, month, day of week and bobblehead specifically entered last. 
 # specify a simple model with bobblehead entered last
 my.model <- {attend ~ ordered_month + ordered_day_of_week + bobblehead}
-
+##Line 99 establishes a predictive model fit to the training set. we see that lm is used to define a linear model. 
 # fit the model to the training set
 train.model.fit <- lm(my.model, data = dodgers.train)
 # summary of model fit to the training set
-print(summary(train.model.fit))
+print(summary(train.model.fit)) ##The print and summary command develop an invisible summary of the training regiment we just employed. 
 # training set predictions from the model fit to the training set
-dodgers.train$predict_attend <- predict(train.model.fit) 
-
+dodgers.train$predict_attend <- predict(train.model.fit) ##This line has the predictions that came from the training regiment. 
+##In line 106-107 we see that they used the training set to test the predictions from the test set using newdata
 # test set predictions from the model fit to the training set
 dodgers.test$predict_attend <- predict(train.model.fit, 
-  newdata = dodgers.test)
+  newdata = dodgers.test) ##newdata is used here to create an optional data frame to look for variables to accurately predict.
 
 # compute the proportion of response variance
 # accounted for when predicting out-of-sample
-cat("\n","Proportion of Test Set Variance Accounted for: ",
+cat("\n","Proportion of Test Set Variance Accounted for: ", ##These lines are used for when we are predicting data based on past data we have had already. Cat is used to convert its argument to strings and generate output from our defined functions. 
 round((with(dodgers.test,cor(attend,predict_attend)^2)),
   digits=3),"\n",sep="")
 
 # merge the training and test sets for plotting
-dodgers.plotting.frame <- rbind(dodgers.train,dodgers.test)
+dodgers.plotting.frame <- rbind(dodgers.train,dodgers.test) ##The rbind command is used to combine bot the traing and test data frames together. 
 
 # generate predictive modeling visual for management
 group.labels <- c("No Bobbleheads","Bobbleheads")
