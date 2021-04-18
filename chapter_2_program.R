@@ -146,15 +146,15 @@ print(summary(my.model.fit)) ##This uses the full data set to estimate the incre
 # type I anova computes sums of squares for sequential tests
 print(anova(my.model.fit))  
 
-cat("\n","Estimated Effect of Bobblehead Promotion on Attendance: ",
+cat("\n","Estimated Effect of Bobblehead Promotion on Attendance: ", ##This line converts the argument into character strings and uses the my.model command from earlier to round off values we have gotten from the coefficients.
 round(my.model.fit$coefficients[length(my.model.fit$coefficients)],
 digits = 0),"\n",sep="")
 
 # standard graphics provide diagnostic plots
-plot(my.model.fit)
+plot(my.model.fit) ## a diagnostic plot of our final model fit us plotted
 
 # additional model diagnostics drawn from the car package
-library(car)
+library(car) ## a seperate model is drawn from the car library package and subsequently graphed modeled and printed.
 residualPlots(my.model.fit)
 marginalModelPlots(my.model.fit)
 print(outlierTest(my.model.fit))
