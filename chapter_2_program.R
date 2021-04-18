@@ -1,12 +1,12 @@
 # Predictive Model for Los Angeles Dodgers Promotion and Attendance (R)
-
+##Lines 3-4 are calling the necessary libraries needed to establish our function for the linear regression and to create a graphics package
 library(car)  # special functions for linear regression
 library(lattice)  # graphics package
-
+##Lines 6-7 are creating the dataset for all 81 dodger home games, as well as checking for the structure of the data frame by making sure it is clean and organized
 # read in data and create a data frame called dodgers
 dodgers <- read.csv("dodgers.csv")
 print(str(dodgers))  # check the structure of the data frame
-
+##Lines 12-20 establish each day of the week as a number from 1-7, as well as assigning labels or abbreviations for each day of the week
 # define an ordered day-of-week variable 
 # for plots and data summaries
 dodgers$ordered_day_of_week <- with(data=dodgers,
@@ -18,15 +18,15 @@ dodgers$ordered_day_of_week <- with(data=dodgers,
   ifelse ((day_of_week == "Saturday"),6,7)))))))
 dodgers$ordered_day_of_week <- factor(dodgers$ordered_day_of_week, levels=1:7,
 labels=c("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"))
-
+##Lines 24-25 is labeling the x axis as "day of week" and the y-axis as "Attendence" with the xlab and ylab commands; 
 # exploratory data analysis with standard graphics: attendance by day of week
 with(data=dodgers,plot(ordered_day_of_week, attend/1000, 
 xlab = "Day of Week", ylab = "Attendance (thousands)", 
 col = "violet", las = 1))
-
+##Line 28 created a table that measured when bobbleheads are use mostly by day of the week and it is found that most bobblehead promotions are on tuesday
 # when do the Dodgers use bobblehead promotions
 with(dodgers, table(bobblehead,ordered_day_of_week)) # bobbleheads on Tuesday
-
+##Lines 32-40 are establishing a test,yes or no ifelse function for each month of the year that the dodgers play. This assigns each month a number, as we see in line 39 with the ordered_month and levels 4-10, They also added labels for the months in line 40.
 # define an ordered month variable 
 # for plots and data summaries
 dodgers$ordered_month <- with(data=dodgers,
@@ -38,21 +38,21 @@ dodgers$ordered_month <- with(data=dodgers,
   ifelse ((month == "SEP"),9,10)))))))
 dodgers$ordered_month <- factor(dodgers$ordered_month, levels=4:10,
 labels = c("April", "May", "June", "July", "Aug", "Sept", "Oct"))
-
+##Lines 43-44 look to be establishing a plotting function with the dodgers home game data ordered by month and with attendence as the y variable. 
 # exploratory data analysis with standard R graphics: attendance by month 
 with(data=dodgers,plot(ordered_month,attend/1000, xlab = "Month", 
 ylab = "Attendance (thousands)", col = "light blue", las = 1))
-
+##Lines 51-55 look to be establishing the parameters for a scatterplot, which we see with the xyplot command. This scatterplot has attendence and temperature on the same axis and skies and day_night on the other. We also see in these lines the group commands that are used in order to establish the labels, symbols and colors. 
 # exploratory data analysis displaying many variables
 # looking at attendance and conditioning on day/night
 # the skies and whether or not fireworks are displayed
 library(lattice) # used for plotting 
-# let us prepare a graphical summary of the dodgers data
+# let us prepare a graphical summary of the dodgers data  ## in line 56 we see that the scatterplot is being setup and the pch command to create a character that will be plotted in the R function.
 group.labels <- c("No Fireworks","Fireworks")
 group.symbols <- c(21,24)
-group.colors <- c("black","black") 
-group.fill <- c("black","red")
-xyplot(attend/1000 ~ temp | skies + day_night, 
+group.colors <- c("black","black") ## In line 57-59 we see that we use the aspect function to set the aspect ratio of plots and layout to divide the device into many rows and columns. 
+group.fill <- c("black","red") ##In line 59 we see they use the strip function to remove un wanted characters.
+xyplot(attend/1000 ~ temp | skies + day_night, ## Lines 60-61 is establishing the x and y axis labels. 
     data = dodgers, groups = fireworks, pch = group.symbols, 
     aspect = 1, cex = 1.5, col = group.colors, fill = group.fill,
     layout = c(2, 2), type = c("p","g"),
@@ -60,8 +60,8 @@ xyplot(attend/1000 ~ temp | skies + day_night,
     xlab = "Temperature (Degrees Fahrenheit)", 
     ylab = "Attendance (thousands)",
     key = list(space = "top", 
-        text = list(rev(group.labels),col = rev(group.colors)),
-        points = list(pch = rev(group.symbols), col = rev(group.colors),
+        text = list(rev(group.labels),col = rev(group.colors)), ##The text function establishes the the group labels
+        points = list(pch = rev(group.symbols), col = rev(group.colors),  ## the points fucntion is used to draw a sequence of points at the specific coordinates.
         fill = rev(group.fill))))  
                 
 # attendance by opponent and day/night game
