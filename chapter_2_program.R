@@ -115,22 +115,22 @@ round((with(dodgers.test,cor(attend,predict_attend)^2)),
 # merge the training and test sets for plotting
 dodgers.plotting.frame <- rbind(dodgers.train,dodgers.test) ##The rbind command is used to combine bot the traing and test data frames together. 
 
-# generate predictive modeling visual for management
+# generate predictive modeling visual for management ## the following set of lines 119-139 establish a predictive linear visual model that best encapsulates our data and business question so that it is ready to be viewed by management.
 group.labels <- c("No Bobbleheads","Bobbleheads")
 group.symbols <- c(21,24)
 group.colors <- c("black","black") 
 group.fill <- c("black","red")  
-xyplot(predict_attend/1000 ~ attend/1000 | training_test, 
-       data = dodgers.plotting.frame, groups = bobblehead, cex = 2,
+xyplot(predict_attend/1000 ~ attend/1000 | training_test, ##we see here that are xyplot containes predicted attendence, actual attendence as well as data from the training regiment.
+       data = dodgers.plotting.frame, groups = bobblehead, cex = 2, ##we see that bobbleheads is a group, which is important because it is the main business question.
        pch = group.symbols, col = group.colors, fill = group.fill, 
        layout = c(2, 1), xlim = c(20,65), ylim = c(20,65), 
        aspect=1, type = c("p","g"),
-       panel=function(x,y, ...)
+       panel=function(x,y, ...) ##these 4 lines are using the panel command to establish our data as cross-sectional time-series data. 
             {panel.xyplot(x,y,...)
              panel.segments(25,25,60,60,col="black",cex=2)
             },
-       strip=function(...) strip.default(..., style=1),
-       xlab = "Actual Attendance (thousands)", 
+       strip=function(...) strip.default(..., style=1), ##here we are stripping unwanted characters with the strip command.
+       xlab = "Actual Attendance (thousands)",  ##The x axis is defined to be the actual attendece while the ylab is using predicited attendence.
        ylab = "Predicted Attendance (thousands)",
        key = list(space = "top", 
               text = list(rev(group.labels),col = rev(group.colors)),
@@ -141,7 +141,7 @@ xyplot(predict_attend/1000 ~ attend/1000 | training_test,
 # use the full data set to obtain an estimate of the increase in
 # attendance due to bobbleheads, controlling for other factors 
 my.model.fit <- lm(my.model, data = dodgers)  # use all available data
-print(summary(my.model.fit))
+print(summary(my.model.fit)) ##This uses the full data set to estimate the increase in attendence due to bobblehead promotion, which is the overreaching question we want to solve.
 # tests statistical significance of the bobblehead promotion
 # type I anova computes sums of squares for sequential tests
 print(anova(my.model.fit))  
