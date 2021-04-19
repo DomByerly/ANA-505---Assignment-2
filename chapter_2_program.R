@@ -82,15 +82,15 @@ bwplot(opponent ~ attend/1000, data = dodgers, groups = day_night, ##Line 71 est
      
 # employ training-and-test regimen for model validation
 set.seed(1234) # set seed for repeatability of training-and-test split
-training_test <- c(rep(1,length=trunc((2/3)*nrow(dodgers))),
+training_test <- c(rep(1,length=trunc((2/3)*nrow(dodgers))), ##The nrow function return the number or rows that were present in the given dataset.
 rep(2,length=(nrow(dodgers) - trunc((2/3)*nrow(dodgers))))) ##The rep function is used to replicate numeric values, while the trunc function is used to round down to the nearest integer.
 dodgers$training_test <- sample(training_test) # random permutation 
 dodgers$training_test <- factor(dodgers$training_test, ##This is creating multiple permutations of the training-and test regiment model
   levels=c(1,2), labels=c("TRAIN","TEST")) ##Establishes two levels and the training and test regiment
 dodgers.train <- subset(dodgers, training_test == "TRAIN") ##Lines 90-91 and 92-93 are establishing the subest for the training regiment and then the test regiment. The print commands are printing the argument and retuning them invisibly.
-print(str(dodgers.train)) # check training data frame
+print(str(dodgers.train)) # check training data frame ##The str function is used to display the internal structure of the dodgers training set, in this case.
 dodgers.test <- subset(dodgers, training_test == "TEST")
-print(str(dodgers.test)) # check test data frame
+print(str(dodgers.test)) # check test data frame ##str does the same thing but for the test regiment
 ##Line 96 specifies a model that includes attendence, month, day of week and bobblehead specifically entered last. 
 # specify a simple model with bobblehead entered last
 my.model <- {attend ~ ordered_month + ordered_day_of_week + bobblehead}
@@ -110,7 +110,7 @@ dodgers.test$predict_attend <- predict(train.model.fit,
 # accounted for when predicting out-of-sample
 cat("\n","Proportion of Test Set Variance Accounted for: ", ##These lines are used for when we are predicting data based on past data we have had already. Cat is used to convert its argument to strings and generate output from our defined functions. 
 round((with(dodgers.test,cor(attend,predict_attend)^2)),
-  digits=3),"\n",sep="")
+  digits=3),"\n",sep="") ##the sep command is used for seperating characters, also used as white space. the digits command controls how many digits there are to print of numeric values.
 
 # merge the training and test sets for plotting
 dodgers.plotting.frame <- rbind(dodgers.train,dodgers.test) ##The rbind command is used to combine bot the traing and test data frames together. 
