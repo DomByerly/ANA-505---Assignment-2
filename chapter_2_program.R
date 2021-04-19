@@ -133,7 +133,7 @@ xyplot(predict_attend/1000 ~ attend/1000 | training_test, ##we see here that are
        xlab = "Actual Attendance (thousands)",  ##The x axis is defined to be the actual attendece while the ylab is using predicited attendence.
        ylab = "Predicted Attendance (thousands)",
        key = list(space = "top", 
-              text = list(rev(group.labels),col = rev(group.colors)),
+              text = list(rev(group.labels),col = rev(group.colors)), ##The text function establishes the numeric vectors of coordinates were the text labes should be.; The rev function is used to return the reverse version of the data.
               points = list(pch = rev(group.symbols), 
               col = rev(group.colors),
               fill = rev(group.fill))))            
@@ -156,7 +156,7 @@ plot(my.model.fit) ## a diagnostic plot of our final model fit us plotted
 # additional model diagnostics drawn from the car package
 library(car) ## a seperate model is drawn from the car library package and subsequently graphed modeled and printed.
 residualPlots(my.model.fit)
-marginalModelPlots(my.model.fit)
+marginalModelPlots(my.model.fit) ##this establishes a marginal model plot which can be very useful when deciding if a logistic regression model is adequete enough or not. 
 print(outlierTest(my.model.fit))
 
 # Suggestions for the student:
