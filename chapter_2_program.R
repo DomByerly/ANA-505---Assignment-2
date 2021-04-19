@@ -6,7 +6,7 @@ library(lattice)  # graphics package
 # read in data and create a data frame called dodgers
 dodgers <- read.csv("dodgers.csv")
 print(str(dodgers))  # check the structure of the data frame
-##Lines 12-20 establish each day of the week as a number from 1-7, as well as assigning labels or abbreviations for each day of the week
+##Lines 12-20 establish each day of the week as a number from 1-7, as well as assigning labels or abbreviations for each day of the week, the ifelse function is also used to do the assigning. 
 # define an ordered day-of-week variable 
 # for plots and data summaries
 dodgers$ordered_day_of_week <- with(data=dodgers,
@@ -83,7 +83,7 @@ bwplot(opponent ~ attend/1000, data = dodgers, groups = day_night, ##Line 71 est
 # employ training-and-test regimen for model validation
 set.seed(1234) # set seed for repeatability of training-and-test split
 training_test <- c(rep(1,length=trunc((2/3)*nrow(dodgers))),
-rep(2,length=(nrow(dodgers) - trunc((2/3)*nrow(dodgers)))))
+rep(2,length=(nrow(dodgers) - trunc((2/3)*nrow(dodgers))))) ##The rep function is used to replicate numeric values, while the trunc function is used to round down to the nearest integer.
 dodgers$training_test <- sample(training_test) # random permutation 
 dodgers$training_test <- factor(dodgers$training_test, ##This is creating multiple permutations of the training-and test regiment model
   levels=c(1,2), labels=c("TRAIN","TEST")) ##Establishes two levels and the training and test regiment
